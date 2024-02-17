@@ -1,8 +1,9 @@
 import { Request, Response, Router } from "express";
 import { MongoClient } from "mongodb";
+import {MONGODB_URI} from '../utils/config'
 
 const signup = Router()
-const uri = 'mongodb://127.0.0.1:27017/portfolio_api'
+const uri = MONGODB_URI
 
 const dbname = 'portfolio_api';
 const dbcollection = 'user';

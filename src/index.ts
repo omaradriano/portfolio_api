@@ -4,10 +4,12 @@ import bodyParser from 'body-parser'
 
 // Routes
 import signup from './routes/signup.routes'
+import login from './routes/login.routes'
+
+import {PORT} from '../src/utils/config'
 
 type WhiteList = Array<string>
 
-const PORT = 3001
 const whiteList: WhiteList = ["http://127.0.0.1:3000", "http://localhost:3000"]
 
 
@@ -19,7 +21,7 @@ try {
         limit: '500kb'
     }))
 
-    // Uso de los headers para permitir peticiones de los sitios especificados
+    // Uso de los headers para permitir peticiones de los sitios especificados (Esto es un middleware)
     app.use((req: Request, res: Response, next: NextFunction) => {
         const origin: string | undefined = req.headers.origin;
         if (origin && whiteList.includes(origin)) {
@@ -32,6 +34,9 @@ try {
 
     // Rutas para el registro de los usuarios
     app.use(signup)
+
+    // Rutas para el login
+    app.use(login)
 
     app.listen(PORT, () => {
         console.log(`Running server on port ${PORT}`);
