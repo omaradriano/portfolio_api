@@ -8,6 +8,9 @@ const uri = MONGODB_URI
 const dbname = 'portfolio_api';
 const dbcollection = 'user';
 
+import {UserData} from '../types/usertypes'
+
+
 // profile.get('/profile/:username', async (request, response) => {
 //     const mongo = await MongoClient.connect(uri)
 //     await mongo.connect()
@@ -28,18 +31,12 @@ const dbcollection = 'user';
 
 // Agregar un usuario
 
-interface UserData {
-    user: string
-    email: string
-    password: string
-}
-
-signup.post('/signup', async (req: Request, res: Response) => {
-    const client = await MongoClient.connect(uri)
+signup.post('/', async (req: Request, res: Response) => {
+    const client = new MongoClient(uri)
     const { user, email, password }: UserData = req.body
     try {
         const db = client.db(dbname)
-        const collection = db.collection(dbcollection)
+        const collection = db.collection<UserData>(dbcollection)
 
         const ifUserExists = await collection.findOne({ "user": user }).then(res => res)
         if (ifUserExists){
@@ -66,7 +63,7 @@ signup.post('/signup', async (req: Request, res: Response) => {
         console.error((err as Error).message);
         res.status(500).json({ message: 'Error interno del servidor', status: 500 });
     } finally {
-        client.close();
+        await client.close();
     }
 })
 
