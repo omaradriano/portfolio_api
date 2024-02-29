@@ -8,8 +8,8 @@ const saltRounds = 10
 const signup = Router()
 const uri = MONGODB_URI
 
-const dbname = 'portfolio_api';
-const dbcollection = 'user';
+const dbname = 'portfolio';
+const dbcollection = 'users';
 
 import { UserData } from '../types/usertypes'
 
