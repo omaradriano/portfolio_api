@@ -11,11 +11,10 @@ import jwt from 'jsonwebtoken'
 import { PORT } from '../src/utils/config'
 
 import {SECRET} from './utils/config'
-import { CustomRequest } from './auth'
 
 type WhiteList = Array<string>
 
-const whiteList: WhiteList = ["http://127.0.0.1:3000", "http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5173"]
+const whiteList: WhiteList = ["http://127.0.0.1:3000", "http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:5173", "https://www.omaradriano.me"]
 
 try {
     const app = express()
@@ -43,11 +42,11 @@ try {
                 throw new Error();
             }
             const decoded: any = jwt.verify(token, SECRET);
-            console.log(decoded);
-            res.status(200).json({data: decoded.username})
+            console.log("Decoded", decoded);
+            res.status(200).json({data: decoded.data})
             // (req as CustomRequest).token = decoded;
         } catch (err) {
-            res.status(401).send('Please authenticate');
+            res.status(401).json({message: 'Please authenticate', status: 401});
         }
     })
 
@@ -58,7 +57,7 @@ try {
     app.use('/login', login)
 
     //Rutas para perfiles
-    // app.use('/profile', profile)
+    app.use('/profile', profile)
 
     app.listen(PORT, () => {
         console.log(`Running server on port ${PORT}`);

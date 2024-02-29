@@ -6,5 +6,6 @@ export interface UserData {
 
 export interface LoginUser {
     user: string,
-    password: string
+    password: string,
+    email: string
 }

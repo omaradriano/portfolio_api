@@ -1,6 +1,9 @@
 import { Request, Response, Router } from "express";
 import { MongoClient } from "mongodb";
-import {MONGODB_URI} from '../utils/config'
+import { MONGODB_URI } from '../utils/config'
+
+import bcrypt from 'bcrypt'
+const saltRounds = 10
 
 const signup = Router()
 const uri = MONGODB_URI
@@ -8,29 +11,9 @@ const uri = MONGODB_URI
 const dbname = 'portfolio_api';
 const dbcollection = 'user';
 
-import {UserData} from '../types/usertypes'
+import { UserData } from '../types/usertypes'
 
-
-// profile.get('/profile/:username', async (request, response) => {
-//     const mongo = await MongoClient.connect(uri)
-//     await mongo.connect()
-
-//     const { username } = request.params
-
-//     const BDD = mongo.db('portfolio_api');
-//     const coleccion = BDD.collection('user');
-
-//     // Insertar el documento en la colección
-//     const resultado = await coleccion.find({ "name": username }).toArray();
-
-//     response.send(resultado[0].name)
-//     console.log(resultado[0].name)
-//     await mongo.close()
-// })
-
-
-// Agregar un usuario
-
+//Saves a new user in the database
 signup.post('/', async (req: Request, res: Response) => {
     const client = new MongoClient(uri)
     const { user, email, password }: UserData = req.body
@@ -39,19 +22,21 @@ signup.post('/', async (req: Request, res: Response) => {
         const collection = db.collection<UserData>(dbcollection)
 
         const ifUserExists = await collection.findOne({ "user": user }).then(res => res)
-        if (ifUserExists){
+        if (ifUserExists) {
             console.log('Usuario ya existe');
             return res.status(400).json({ message: 'El usuario ya existe', status: 400 })
-        } 
+        }
 
         const ifEmailExists = await collection.findOne({ "email": email }).then(res => res)
-        if (ifEmailExists){
+        if (ifEmailExists) {
             console.log('Correo electronico ya registrado');
             return res.status(400).json({ message: 'Ya existe un correo registrado', status: 400 })
-        } 
+        }
+
+        let hashedPass = await bcrypt.hash(password, saltRounds)
 
         const data: UserData = {
-            user, email, password
+            user, email, password: hashedPass
         }
 
         const result = await collection.insertOne(data);
