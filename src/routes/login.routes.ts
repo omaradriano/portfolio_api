@@ -14,8 +14,8 @@ import bcrypt from 'bcrypt'
 const login = Router()
 const uri = MONGODB_URI
 
-const dbname = 'portfolio_api';
-const dbcollection = 'user';
+const dbname = 'portfolio';
+const dbcollection = 'users';
 
 login.post('/', async (req: Request, res: Response) => {
     const client = new MongoClient(uri)
