@@ -35,6 +35,7 @@ try {
         next();
     });
 
+    //Esto es provisional para saber si la sesion sigue activa. Esto es temporal mientras no se implementa un middleware
     app.post('/verifycredentials', (req: Request, res: Response) => {
         try {
             const token = req.header('Authorization')?.replace('Bearer ', '');

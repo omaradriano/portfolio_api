@@ -23,13 +23,11 @@ signup.post('/', async (req: Request, res: Response) => {
 
         const ifUserExists = await collection.findOne({ "user": user }).then(res => res)
         if (ifUserExists) {
-            console.log('Usuario ya existe');
             return res.status(400).json({ message: 'El usuario ya existe', status: 400 })
         }
 
         const ifEmailExists = await collection.findOne({ "email": email }).then(res => res)
         if (ifEmailExists) {
-            console.log('Correo electronico ya registrado');
             return res.status(400).json({ message: 'Ya existe un correo registrado', status: 400 })
         }
 

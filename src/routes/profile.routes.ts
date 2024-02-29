@@ -1,4 +1,5 @@
-import {Router, Request, Response, NextFunction} from 'express'
+import {Router, Request, Response} from 'express'
+//Auth va a usarse entre solicitudes para asegurarnos de que aun existe una sesion activa en localStorage
 import { auth } from '../auth'
 
 const profile = Router()
