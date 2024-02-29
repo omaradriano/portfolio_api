@@ -8,7 +8,7 @@ import profile from './routes/profile.routes'
 import jwt from 'jsonwebtoken'
 
 // Extraer variables de entorno
-import { PORT } from '../src/utils/config'
+import { PORT } from './utils/config'
 
 import {SECRET} from './utils/config'
 
